@@ -14,8 +14,8 @@ const checkIfParamsArrayIsEmpty = params => Boolean(params.length)
 
 const checkBufferObject = element => element instanceof Object && element.name && Buffer.isBuffer(element.buffer)
 
-const checkCommandForIO = element => element.includes('-in') || element.includes('-out')
-    || element.includes('-keyout') || element.includes('-signkey') || element.includes('-key')
+const checkCommandForIO = element => element === '-in' || element === '-out'
+    || element === '-keyout' || element === '-signkey' || element === '-key'
 
 const checkDataTypeCompatibility = (params) => {
     const allowedParamsDataTypes = ['string', 'object']
@@ -48,7 +48,7 @@ module.exports = function openssl(params, callback = () => undefined) {
 
 
     for (let i = 0; i <= parameters.length - 1; i++) {
-        
+
         if (checkBufferObject(parameters[i])) {
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir);
@@ -63,7 +63,7 @@ module.exports = function openssl(params, callback = () => undefined) {
             });
 
             parameters[i] = parameters[i].name
-            parameters[i] = dir + parameters[i];            
+            parameters[i] = dir + parameters[i];
         }
 
         if (checkCommandForIO(parameters[i]) && typeof parameters[i + 1] !== 'object') {
